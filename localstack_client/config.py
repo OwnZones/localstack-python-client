@@ -1,5 +1,6 @@
 import os
 import json
+import re
 
 _service_endpoints_template = {
     'apigateway': '{proto}://{host}:4567',
@@ -38,3 +39,7 @@ def get_service_endpoints(localstack_host=None):
 
     return json.loads(json.dumps(_service_endpoints_template)
         .replace('{proto}', protocol).replace('{host}', localstack_host))
+
+def get_service_ports():
+    str = re.sub(r'\"{proto}://{host}:(\d+)\"', r'\1', json.dumps(_service_endpoints_template))
+    return json.loads(str)
